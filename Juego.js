@@ -14,6 +14,10 @@ export default class Juego extends Phaser.Scene {
 
     // Variable para controlar si ya se generó un cubo en este nivel
     this.nuevoCuboGenerado = false;
+
+    // Variable para controlar la velocidad en X e Y de la bola
+    this.velocidadBolaX = this.velocidadBola;
+    this.velocidadBolaY = this.velocidadBola;
   }
 
   preload() {}
@@ -22,11 +26,8 @@ export default class Juego extends Phaser.Scene {
     // Fondo del juego
     this.cameras.main.setBackgroundColor("#FFFFFF");
 
-    // Bola verde
-    this.bola = this.physics.add.circle(400, 300, 15, 0x00FF00);
-    this.bola.setBounce(1); // Hacer que la bola rebote en lugar de detenerse en las colisiones
-    this.bola.setVelocity(this.velocidadBola, this.velocidadBola); // Configurar velocidad inicial
-    this.bola.setGravity(0, 0); // Establecer gravedad en cero para la bola
+    // Bola como un círculo
+    this.bola = this.add.circle(400, 300, 15, 0x00FF00);
 
     // Barra amarilla
     this.barra = this.add.rectangle(400, 550, 100, 10, 0xFFFF00);
@@ -46,14 +47,32 @@ export default class Juego extends Phaser.Scene {
     this.cursorKeys = this.input.keyboard.createCursorKeys();
 
     // Eventos de colisión
-    this.physics.add.collider(this.bola, this.barra, this.colisionBolaBarra, null, this);
+    this.physics.add.collider(
+      this.bola,
+      this.barra,
+      this.colisionBolaBarra,
+      null,
+      this
+    );
 
     // Colisionador entre la bola y los cubos
     this.cubos = this.physics.add.group();
-    this.physics.add.collider(this.bola, this.cubos, this.colisionBolaCubo, null, this);
+    this.physics.add.collider(
+      this.bola,
+      this.cubos,
+      this.colisionBolaCubo,
+      null,
+      this
+    );
 
     // Colisionador entre la barra y los cubos
-    this.physics.add.collider(this.barra, this.cubos, this.colisionBarraCubo, null, this);
+    this.physics.add.collider(
+      this.barra,
+      this.cubos,
+      this.colisionBarraCubo,
+      null,
+      this
+    );
 
     // Intervalo para generar el cubo azul
     this.time.addEvent({
@@ -81,7 +100,18 @@ export default class Juego extends Phaser.Scene {
 
       // Movimiento de la bola
       if (this.gameStarted) {
-        // La lógica de movimiento de la bola permanece sin cambios
+        // Actualizar posición de la bola basada en las velocidades
+        this.bola.x += this.velocidadBolaX / 60; // 60 es la tasa de actualización de Phaser
+        this.bola.y += this.velocidadBolaY / 60;
+
+        // Lógica de rebote en los bordes
+        if (this.bola.x >= 800 || this.bola.x <= 0) {
+          this.velocidadBolaX = -this.velocidadBolaX;
+        }
+
+        if (this.bola.y >= 600 || this.bola.y <= 0) {
+          this.velocidadBolaY = -this.velocidadBolaY;
+        }
       }
     } else {
       // Si el nivel es mayor que 20, el juego se pausa y muestra el mensaje "Win"
@@ -105,8 +135,8 @@ export default class Juego extends Phaser.Scene {
       this.nivelText.setText("Nivel: " + this.nivel);
 
       this.velocidadBola *= 1.1;
-      this.bola.vx = this.velocidadBola * Math.cos(Phaser.Math.FloatBetween(0, Math.PI * 2));
-      this.bola.vy = this.velocidadBola * Math.sin(Phaser.Math.FloatBetween(0, Math.PI * 2));
+      this.velocidadBolaX *= 1.1;
+      this.velocidadBolaY *= 1.1;
 
       const randomColor = Phaser.Display.Color.RandomRGB();
       this.cameras.main.setBackgroundColor(randomColor.color);
@@ -127,7 +157,7 @@ export default class Juego extends Phaser.Scene {
       this.nuevoCuboGenerado = true;
     }
   }
-
-
 }
+
+
 
