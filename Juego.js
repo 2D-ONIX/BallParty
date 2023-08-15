@@ -95,7 +95,25 @@ export default class Juego extends Phaser.Scene {
   }
 
   colisionBolaBarra() {
-    // La lógica de colisión de la barra y la bola permanece sin cambios
+    this.puntos += 10;
+    this.puntosText.setText("Puntos: " + this.puntos);
+
+    if (this.puntos >= 100) {
+      this.puntos = 0;
+      this.puntosText.setText("Puntos: " + this.puntos);
+      this.nivel += 1;
+      this.nivelText.setText("Nivel: " + this.nivel);
+
+      this.velocidadBola *= 1.1;
+      this.bola.vx = this.velocidadBola * Math.cos(Phaser.Math.FloatBetween(0, Math.PI * 2));
+      this.bola.vy = this.velocidadBola * Math.sin(Phaser.Math.FloatBetween(0, Math.PI * 2));
+
+      const randomColor = Phaser.Display.Color.RandomRGB();
+      this.cameras.main.setBackgroundColor(randomColor.color);
+
+      // Habilitar la generación de un nuevo cubo para el próximo nivel
+      this.nuevoCuboGenerado = false;
+    }
   }
 
   generarCuboAzul() {
@@ -110,12 +128,6 @@ export default class Juego extends Phaser.Scene {
     }
   }
 
-  colisionBolaCubo(bola, cubo) {
-    // La lógica de colisión entre la bola y el cubo permanece sin cambios
-  }
 
-  colisionBarraCubo(barra, cubo) {
-    // La lógica de colisión entre la barra y el cubo permanece sin cambios
-  }
 }
 
