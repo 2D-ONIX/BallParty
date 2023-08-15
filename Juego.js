@@ -44,6 +44,13 @@ export default class Juego extends Phaser.Scene {
     // Eventos de colisión
     this.physics.add.collider(this.bola, this.barra, this.colisionBolaBarra, null, this);
 
+    // Colisionador entre la bola y los cubos
+    this.cubos = this.physics.add.group();
+    this.physics.add.collider(this.bola, this.cubos, this.colisionBolaCubo, null, this);
+
+    // Colisionador entre la barra y los cubos
+    this.physics.add.collider(this.barra, this.cubos, this.colisionBarraCubo, null, this);
+
     // Intervalo para generar el cubo azul
     this.time.addEvent({
       delay: 3000,
@@ -104,6 +111,22 @@ export default class Juego extends Phaser.Scene {
   generarCuboAzul() {
     const x = Phaser.Math.Between(50, 750);
     const y = Phaser.Math.Between(50, 550);
-    this.add.rectangle(x, y, 30, 30, 0x0000FF);
+    const cubo = this.add.rectangle(x, y, 30, 30, 0x0000FF);
+    this.cubos.add(cubo);
+  }
+
+  colisionBolaCubo(bola, cubo) {
+    // Lógica de colisión entre bola y cubo
+    // Por ejemplo, puedes eliminar el cubo y aumentar los puntos aquí
+    cubo.destroy();
+    this.puntos += 5;
+    this.puntosText.setText("Puntos: " + this.puntos);
+  }
+
+  colisionBarraCubo(barra, cubo) {
+    // Lógica de colisión entre barra y cubo
+    // Por ejemplo, puedes eliminar el cubo y realizar alguna acción específica aquí
+    cubo.destroy();
+    // Aquí puedes implementar acciones relacionadas con la colisión de la barra y el cubo
   }
 }
