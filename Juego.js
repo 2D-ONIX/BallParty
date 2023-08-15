@@ -61,31 +61,41 @@ export default class Juego extends Phaser.Scene {
   }
 
   update() {
-    // Movimiento de la barra
-    if (this.cursorKeys.left.isDown) {
-      this.barra.x -= 5;
-    } else if (this.cursorKeys.right.isDown) {
-      this.barra.x += 5;
-    }
-
-    if (this.cursorKeys.up.isDown) {
-      this.barra.y -= 5;
-    } else if (this.cursorKeys.down.isDown) {
-      this.barra.y += 5;
-    }
-
-    // Movimiento de la bola
-    if (this.gameStarted) {
-      this.bola.x += this.bola.vx * this.time.deltaTime / 1000;
-      this.bola.y += this.bola.vy * this.time.deltaTime / 1000;
-
-      // Rebote en los bordes de la pantalla
-      if (this.bola.x <= 15 || this.bola.x >= 785) {
-        this.bola.vx *= -1;
+    if (this.nivel <= 20) {
+      // Movimiento de la barra
+      if (this.cursorKeys.left.isDown) {
+        this.barra.x -= 5;
+      } else if (this.cursorKeys.right.isDown) {
+        this.barra.x += 5;
       }
-      if (this.bola.y <= 15 || this.bola.y >= 585) {
-        this.bola.vy *= -1;
+  
+      if (this.cursorKeys.up.isDown) {
+        this.barra.y -= 5;
+      } else if (this.cursorKeys.down.isDown) {
+        this.barra.y += 5;
       }
+  
+      // Movimiento de la bola
+      if (this.gameStarted) {
+        this.bola.x += this.bola.vx * this.time.deltaTime / 1000;
+        this.bola.y += this.bola.vy * this.time.deltaTime / 1000;
+  
+        // Rebote en los bordes de la pantalla
+        if (this.bola.x <= 15 || this.bola.x >= 785) {
+          this.bola.vx *= -1;
+        }
+        if (this.bola.y <= 15 || this.bola.y >= 585) {
+          this.bola.vy *= -1;
+        }
+      }
+    } else {
+      // Si el nivel es mayor que 20, el juego se pausa y muestra el mensaje "Win"
+      this.physics.pause();
+      this.add.text(400, 300, "Win", {
+        fontSize: "48px",
+        fill: "#000000",
+        align: "center",
+      }).setOrigin(0.5);
     }
   }
 
