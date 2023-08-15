@@ -1,11 +1,4 @@
-# Phaser 3 Template
+# Ball party
 
-Bienvenidos a Space Asteroids
+Aguanta todo lo que puedas sin perder
 
-Controles:
-
-Se acelera con la flecha  ↑
-
-Se gira cno las flechas ← y →
-
-Se dispara con espacio
