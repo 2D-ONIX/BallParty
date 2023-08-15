@@ -1,4 +1,4 @@
-import Juego from ".Juego.js";
+import Juego from "Juego.js";
 
 // Create a new Phaser config object
 const config = {
